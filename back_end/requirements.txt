@@ -1,0 +1,9 @@
+Flask==2.1.0
+Flask_Cors==3.0.10
+numpy==1.22.3
+pytorch_crf==0.7.2
+seqeval==1.2.2
+torch==1.11.0
+TorchCRF==1.1.0
+tqdm==4.63.1
+transformers==4.17.0
