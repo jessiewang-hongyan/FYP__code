@@ -1,0 +1,14 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+->App: User Utterance JSON
+App -> JointBERTModel: User Utterance String
+
+JointBERTModel -> RespondDecider: Intent and Slots
+RespondDecider -> ExtensiveAPIs: Command for Task
+ExtensiveAPIs --> RespondDecider: Execution Result
+RespondDecider --> App: Intent and Execution Result
+<--App : Http Respond
+@enduml

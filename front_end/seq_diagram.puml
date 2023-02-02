@@ -1,0 +1,24 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor Actor as User
+
+activate TextEditingController
+activate ChatPage
+
+User -> TextEditingController: Natural Language Input String
+TextEditingController -> ChatPage: Create ChatBubble
+TextEditingController -> HttpClient: Input String Request
+activate HttpClient
+
+HttpClient ->o]: Send Http Request
+
+HttpClient <--]: Http Respond
+ChatPage <-- HttpClient: Create ChatBubble for Respond
+deactivate HttpClient
+
+User <-- ChatPage: Display Respond Message
+
+@enduml

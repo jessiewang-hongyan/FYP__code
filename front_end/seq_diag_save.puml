@@ -1,0 +1,28 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor Actor as User
+
+activate ChatBubble
+activate ChatPage
+
+User -> ChatBubble: Activate Save Button
+ChatBubble -> ChatBubble: Add Contents\n to Saved List
+||50||
+
+User -> ChatBubble: Deactivate Save Button
+ChatBubble -> ChatBubble: Remove Contents\n from Saved List
+||50||
+
+User -> ChatPage: Press Saved Button
+ChatBubble --> ChatPage: Saved List
+User <-- ChatPage: Display Saved List
+
+||50||
+User -> ChatPage: Press Return Button
+ChatPage --> User: Display Chat Page
+
+
+@enduml
