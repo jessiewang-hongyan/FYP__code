@@ -23,13 +23,16 @@ class ChatBubbleState extends State<ChatBubble> {
 
   static Iterable<ListTile> getSaved() {
     final tiles = _saved.map(
-          (ChatBubble b) {
+      (ChatBubble b) {
         return ListTile(
-          title: Text(
-            b.text,
-            style: _biggerFont,
-          ),
-        );
+            title: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                child: ListTile(
+                    title: Text(
+                  b.text,
+                  style: _biggerFont,
+                ))));
       },
     );
     return tiles;
@@ -69,22 +72,22 @@ class ChatBubbleState extends State<ChatBubble> {
               trailing: widget.isCurrentUser
                   ? null
                   : Icon(
-                alreadySaved ? Icons.favorite : Icons.favorite_border,
-                color: alreadySaved ? Colors.red : null,
-              ),
+                      alreadySaved ? Icons.favorite : Icons.favorite_border,
+                      color: alreadySaved ? Colors.red : null,
+                    ),
               onTap: widget.isCurrentUser
                   ? null
                   : () {
-                //call setState() will call build() the State object
-                setState(() {
-                  if (alreadySaved) {
-                    _saved.remove(widget);
-                  } else {
-                    _saved.add(widget);
-                  }
-                  toggleSavedState();
-                });
-              },
+                      //call setState() will call build() the State object
+                      setState(() {
+                        if (alreadySaved) {
+                          _saved.remove(widget);
+                        } else {
+                          _saved.add(widget);
+                        }
+                        toggleSavedState();
+                      });
+                    },
             ),
           ),
         ),

@@ -98,11 +98,26 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _buildBubbleList() {
-    return ListView.builder(
+    // Full screen width and height
+    double height = MediaQuery.of(context).size.height;
+
+    // Height (without SafeArea)
+    var padding = MediaQuery.of(context).viewPadding;
+
+    // Height (without status and toolbar)
+    double height3 = height - padding.top - kToolbarHeight;
+
+    //Height without status bar and text field
+    double height4 = height3 - 90;
+
+    return SizedBox(
+      height: height4,
+      child: ListView.builder(
+        // shrinkWrap: true,
         itemCount: chats.length,
         itemBuilder: (context, index) {
           return chats[index];
-        });
+        }));
   }
 
   //connect to server and print a hello message
@@ -184,7 +199,7 @@ class _ChatPageState extends State<ChatPage> {
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Saved Records'),
+            title: const Text('Saved Records')
           ),
           body: ListView(children: divided),
         );

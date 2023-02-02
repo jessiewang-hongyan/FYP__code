@@ -3,13 +3,10 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 
-//server address for localhost testing is 10.0.2.2 in mobile
-// var greetingUri = Uri.http("10.0.2.2:5000", "/hello");
-// var queryUri = Uri.http("10.0.2.2:5000", "/respond");
+//server address for localhost testing is 10.0.2.2
+var greetingUri = Uri.http("10.0.2.2:5000", "/hello");
+var queryUri = Uri.http("10.0.2.2:5000", "/respond");
 
-//server address for localhost testing is 127.0.0.1 in web
-var greetingUri = Uri.http("127.0.0.1:5000", "/hello");
-var queryUri = Uri.http("127.0.0.1:5000", "/respond");
 
 //send request
 Future<String> requestGreeting() async {
@@ -17,24 +14,24 @@ Future<String> requestGreeting() async {
   var _text = "Requesting...";
 
   try {
-    final client = Client();
-    final resp = await client.get(greetingUri,
-    headers: {
-      // "Access-Control-Allow-Origin": "*",
-      // "Access-Control-Allow-Headers": "Access-Control-Allow-Origin, Accept"
-    });
+    HttpClient httpClient = HttpClient();
+    // Client httpClient = Client();
+    HttpClientRequest request = await httpClient.getUrl(greetingUri);
 
     // request.headers.add(
     //   "user-agent",
     //   "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1",
     // );
 
-    _text = resp.body;
+    HttpClientResponse response = await request.close();
 
-    // if (response.statusCode != 200) {
-    //   throw Exception(response.statusCode);
-    // }
+    _text = await response.transform(utf8.decoder).join();
 
+    if (response.statusCode != 200) {
+      throw Exception(response.statusCode);
+    }
+
+    httpClient.close();
     return _text;
   } catch (e) {
     return "Request failed.$e";
@@ -43,33 +40,24 @@ Future<String> requestGreeting() async {
 
 Future<String> postInput(String inputStr) async {
   try {
-    // HttpClient httpClient = HttpClient();
-    Client client = Client();
+    HttpClient httpClient = HttpClient();
+    // Client httpClient = Client();
 
-    // HttpClientRequest request = await httpClient.postUrl(queryUri);
-    // request.headers.add('Content-Type', 'application/json; charset=UTF-8');
-    // request.write(jsonEncode(<String, String>{
-    //   'input': inputStr,
-    // }));
+    HttpClientRequest request = await httpClient.postUrl(queryUri);
+    request.headers.add('Content-Type', 'application/json; charset=UTF-8');
+    request.write(jsonEncode(<String, String>{
+      'input': inputStr,
+    }));
 
-    final resp = await client.post(queryUri,
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8'
-        },
-      body: jsonEncode(<String, String>{
-          'input': inputStr,
-        })
-    );
+    HttpClientResponse response = await request.close();
 
-    // HttpClientResponse response = await request.close();
+    if (response.statusCode != 200) {
+      throw Exception(response.statusCode);
+    }
 
-    // if (resp.statusCode != 200) {
-    //   throw Exception(resp.statusCode);
-    // }
+    httpClient.close();
+    return response.transform(utf8.decoder).join();
 
-    // httpClient.close();
-    // return response.transform(utf8.decoder).join();
-    return resp.body;
   } catch(e) {
     return 'Failed to get respond string. $e';
   }

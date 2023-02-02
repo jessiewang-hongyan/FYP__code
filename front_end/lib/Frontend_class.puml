@@ -1,0 +1,80 @@
+@startuml
+set namespaceSeparator ::
+
+abstract class "code::bubble.dart::Bubble" {
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "code::bubble.dart::Bubble"
+
+class "code::chat_bubble.dart::ChatBubble" {
+  +String text
+  +bool isCurrentUser
+  +ChatBubbleState createState()
+}
+
+"code::bubble.dart::Bubble" <|-- "code::chat_bubble.dart::ChatBubble"
+
+class "code::chat_bubble.dart::ChatBubbleState" {
+  {static} -Set<ChatBubble> _saved
+  {static} -TextStyle _biggerFont
+  +bool alreadySaved
+  +Widget build()
+  {static} +Iterable<ListTile> getSaved()
+  +void toggleSavedState()
+  -Widget _buildBubble()
+}
+
+"code::chat_bubble.dart::ChatBubbleState" o-- "flutter::src::painting::text_style.dart::TextStyle"
+"flutter::src::widgets::framework.dart::State" <|-- "code::chat_bubble.dart::ChatBubbleState"
+
+class "code::chat_page.dart::ChatPage" {
+  +State<StatefulWidget> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "code::chat_page.dart::ChatPage"
+
+class "code::chat_page.dart::_ChatPageState" {
+  +List<Bubble> chats
+  +TextEditingController textController
+  -bool _validate
+  +LoadBubble loadPointer
+  -bool _sayHello
+  +Widget build()
+  +Future<String> generateRespond()
+  +Future<bool?> emptyInputDialog()
+  -Widget _buildRow()
+  -Widget _buildLoadingRow()
+  -Widget _buildBubbleList()
+  -Future<void> _connectSayHello()
+  -Future<String> _queryGreeting()
+  +void submitInput()
+  -void _removeLoadingRow()
+  -void _addToList()
+  -void _pushSaved()
+}
+
+"code::chat_page.dart::_ChatPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"code::chat_page.dart::_ChatPageState" o-- "code::loading_bubble.dart::LoadBubble"
+"flutter::src::widgets::framework.dart::State" <|-- "code::chat_page.dart::_ChatPageState"
+
+class "code::loading_bubble.dart::LoadBubble" {
+  +LoadBubbleState createState()
+}
+
+"code::bubble.dart::Bubble" <|-- "code::loading_bubble.dart::LoadBubble"
+
+class "code::loading_bubble.dart::LoadBubbleState" {
+  +Widget build()
+  -Widget _buildBubble()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "code::loading_bubble.dart::LoadBubbleState"
+
+class "code::main.dart::MyApp" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "code::main.dart::MyApp"
+
+
+@enduml
