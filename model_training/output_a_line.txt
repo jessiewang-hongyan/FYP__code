@@ -1,0 +1,1 @@
+<atis_airfare> -> I want to book a ticket from [London:B-fromloc.city_name] to [Hong:B-toloc.city_name] [Kong:I-toloc.city_name]
